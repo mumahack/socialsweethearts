@@ -2,23 +2,20 @@
 require __DIR__ . '/vendor/autoload.php';
 
 
-
-
 $imagine = new Imagine\Imagick\Imagine();
 // make an empty image (canvas) 120x160px
 
 $constant = 250;
 
 
-$collage = $imagine->create(new Imagine\Image\Box($constant*2, $constant*2));
+$collage = $imagine->create(new Imagine\Image\Box($constant * 2, $constant * 2));
 
 // starting coordinates (in pixels) for inserting the first image
 $x = 0;
 $y = 0;
 
 
-
-foreach (glob(__DIR__.'/sample/*.jpg') as $path) {
+foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
     // open photo
     $photo = $imagine->open($path);
 
@@ -38,10 +35,15 @@ foreach (glob(__DIR__.'/sample/*.jpg') as $path) {
         $x = 0;
     }
 
-    if ($y >= $constant*2) {
+    if ($y >= $constant * 2) {
         break; // done
     }
 }
+
+
+$collage->draw()
+    ->ellipse(new \Imagine\Image\Point(200, 150), new \Imagine\Image\Box(300, 225), $collage->palette()->color('fff'));
+
 
 $collage->show("jpg");
 
