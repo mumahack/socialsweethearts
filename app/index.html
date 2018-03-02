@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SFW</title>
+
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+        <button onclick="app.login()">Login with Facebook</button>
+
+        <script>
+            window.fbAsyncInit = function() {
+            FB.init({
+              appId            : '179617672817042',
+              autoLogAppEvents : true,
+              status           : true,
+              version          : 'v2.12'
+            });
+            };
+
+            (function(d, s, id){
+             var js, fjs = d.getElementsByTagName(s)[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement(s); js.id = id;
+             js.src = "https://connect.facebook.net/en_US/sdk.js";
+             fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <script src="js/app.js" type="text/javascript"></script>
+    </body>
+</html>
