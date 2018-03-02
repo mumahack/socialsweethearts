@@ -39,10 +39,10 @@ foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
         break; // done
     }
 }
-
-
+$file = "OpenSans-Regular.ttf";
+$font = new \Imagine\Imagick\Font($collage->getImagick(), $file, 70, $collage->palette()->color('fff'));
 $collage->draw()
-    ->ellipse(new \Imagine\Image\Point(200, 150), new \Imagine\Image\Box(300, 225), $collage->palette()->color('fff'));
+    ->text("MuMaLAb", $font, new \Imagine\Image\Point(0, $constant));
 
 
 $collage->show("jpg");
