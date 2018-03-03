@@ -54,24 +54,15 @@
             name: user.name,
             gender: user.info.gender,
             image: user.info.image,
-            imageData: user.info.imagedata
         };
     };
 
     app.getUserInfo = function(userId, callback) {
         FB.api("/" + userId, { fields: "picture.type(square).width(720).height(720),gender" }, function(response) {
-            var xhr = new XMLHttpRequest();
-
-            xhr.onload = function() {
-                callback({
-                    image: response.picture.data.url,
-                    imagedata: app.base64(xhr.responseText),
-                    gender: response.gender
-                });
-            };
-
-            xhr.open("GET", response.picture.data.url);
-            xhr.send();
+            callback({
+                image: response.picture.data.url,
+                gender: response.gender
+            });
         });
     };
 
