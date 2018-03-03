@@ -1,5 +1,9 @@
 (function(global) {
     var app = {};
+    var $area = document.querySelector("#imageArea");
+    var $button = document.querySelector("#login");
+    var $loader = document.querySelector("#loader");
+    var $info = document.querySelector("#loader span");
 
     app.login = function() {
         FB.login(app.onLogin, {scope: "publish_actions,user_posts,user_relationships,user_photos,user_location,user_likes,user_status,user_friends,user_about_me,user_relationship_details,user_tagged_places"});
@@ -7,6 +11,9 @@
 
     app.onLogin = function() {
         console.log("logging");
+        $button.style.display = "none";
+        $loader.style.display = "block";
+        $info.innerHTML = "Loading your profile...";
 
         FB.api("/me", function(response) {
             var userId = response.id;
@@ -25,12 +32,14 @@
                     });
                 },
                 function(callback) {
+                    $info.innerHTML = "Receiving your best friends...";
                     app.loadFriends(userId, function(users) {
                         friends.push.apply(friends, users);
                         callback();
                     });
                 }
             ], function() {
+                $info.innerHTML = "Generating poster...";
                 var data = [app.getMessage(me)];
                 friends.forEach(function(friend) {
                     data.push(app.getMessage(friend));
@@ -40,9 +49,7 @@
                     if(err) {
                         console.error(err);
                     } else {
-                        var image = new Image();
-                        image.src = "data:image/jpg;base64," + app.base64(response.responseText);
-                        app.showImage(image);
+                        app.showImage(response.responseText);
                     }
                 });
             });
@@ -101,8 +108,16 @@
     };
 
     app.showImage = function(image) {
-        var area = document.querySelector("#imageArea");
-        area.appendChild(image);
+        $area.src = image;
+        $area.style.display = "block";
+        $loader.style.display = "none";
+
+        FB.ui({
+            method: 'share',
+            href: image,
+        }, function(response){
+            console.log(arguments);
+        });
     };
 
     app.ajax = function(url, data, callback) {
