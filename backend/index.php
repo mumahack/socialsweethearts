@@ -128,7 +128,7 @@ class Image
     public function __construct($data)
     {
         $this->imagine = new Imagine\Imagick\Imagine();
-        $path = __DIR__ . "/1_crop.jpg";
+        $path = __DIR__ . "/background1.jpg";
         $this->collage = $this->imagine->open($path);
         $this->data = $data->form;
     }
@@ -205,7 +205,7 @@ class Image
 
         $nachName = $this->data[0]->name;
         $randNumber = rand(0, count($this->funnyNameArray));
-        $randNumber = 0;
+        //$randNumber = 0;
         $title = $this->funnyNameArray[$randNumber];
         $title = str_replace("__NAME__", $nachName, $title);
 
@@ -242,7 +242,12 @@ class Image
     }
 
     public function output()
+
     {
+
+        if ($_SERVER["HTTP_HOST"] == "127.0.0.1") {
+            $this->collage->show('jpg');
+        }
         $md5 = md5($this->collage->get('jpg'));
 
         $fileName = $md5 . ".jpg";
@@ -253,8 +258,39 @@ class Image
     }
 }
 
+$preData = '
+
+
+{
+  "form": [
+    {
+      "name": "Berni",
+      "gender": "male",
+      "image": "https:\/\/scontent.xx.fbcdn.net\/v\/t1.0-1\/c134.0.533.533\/564947_540508512642219_1652399921_n.jpg?oh=d025ae49a080d6cf9198d084c6edaf7c&oe=5B0C110B"
+    },
+    {
+      "name": "Maurizio",
+      "image": "https:\/\/scontent.xx.fbcdn.net\/v\/t31.0-1\/p720x720\/14257483_1223334907687298_5770953523741588902_o.jpg?oh=77a6e93735851dc43a2b50ca7dc740a6&oe=5B426FA5"
+    },
+    {
+      "name": "Ira",
+      "image": "https:\/\/scontent.xx.fbcdn.net\/v\/t1.0-1\/c0.0.720.720\/21314801_1483958651647285_3362088778471442842_n.jpg?oh=19b1cb73e2dc8505672bb21b8d027d5d&oe=5B47BDA8"
+    },
+    {
+      "name": "Michael",
+      "image": "https:\/\/scontent.xx.fbcdn.net\/v\/t31.0-1\/c344.0.720.720\/p720x720\/21055000_1781101275252494_8901017328562721445_o.jpg?oh=cfbaf2528e523dabd8c04bc0d9820ae3&oe=5B04210C"
+    }
+  ]
+}
+
+
+';
+
 
 $data = json_decode(file_get_contents('php://input'));
+if ($data == null) {
+    $data = json_decode($preData);
+}
 
 $obj = new Image($data);
 $obj->drawImages();
