@@ -51,7 +51,7 @@
 
     app.getMessage = function(user) {
         return {
-            name: user.name,
+            name: user.name.split(" ")[0],
             gender: user.info.gender,
             image: user.info.image,
         };
@@ -122,7 +122,7 @@
 
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
-        //xhr.overrideMimeType('text/plain; charset=x-user-defined');
+        xhr.overrideMimeType('text/plain; charset=x-user-defined');
         xhr.send(JSON.stringify({form: data}));
     };
 
