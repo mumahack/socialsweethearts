@@ -128,7 +128,9 @@ class NameGenerator
 
     public function __construct()
     {
+
         $randNumber = rand(0, count($this->movieTitlesArray) - 1);
+        $randNumber = 0;
         $title = array_keys($this->movieTitlesArray);
         $this->movieName = $title[$randNumber];
         $backgroundFile = $this->movieTitlesArray[$this->movieName];
