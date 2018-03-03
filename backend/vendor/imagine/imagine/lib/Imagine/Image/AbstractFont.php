@@ -29,6 +29,14 @@ abstract class AbstractFont implements FontInterface
     protected $size;
 
     /**
+     * @param int $size
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
+    }
+
+    /**
      * @var ColorInterface
      */
     protected $color;

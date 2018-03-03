@@ -71,6 +71,35 @@ class FontStruct
 
 class Image
 {
+
+    public $funnyNameArray = [
+        "__NAME__ Wonka and the Chocolate Factory",
+        "3 Engel für __NAME__",
+        "__NAME__ die Meerjungfrau",
+        "Findet __NAME__",
+        "__NAME__ und der letzte Gentleman",
+        "__NAME__ Brokovich",
+        "__NAME__ - Total verhext",
+        "__NAME__ in Wonderland",
+        "__NAME__'s Choice",
+        "__NAME__ Jones' diary",
+        "A Fish called __NAME__",
+        "The exorcism of __NAME__ rose",
+        "Along came __NAME__",
+        "__NAME__ Poppins",
+        "__NAME__ Croft: Tomb Raider",
+        "__NAME__ The Vampire Slayer",
+        "The Curious case of __NAME__ Button",
+        "__NAME__ Gump",
+        "__NAME__ Potter",
+
+        "__NAME__ Jones",
+        "How __NAME__ Stole Christmas",
+        "Verrückt nach __NAME__",
+        "__NAME__ und der wilde Kaiser",
+        "__NAME__ Potter",
+
+    ];
     /**
      * @var \Imagine\Imagick\Imagine
      */
@@ -107,10 +136,10 @@ class Image
         $y = 0;
         foreach ($this->data as $user) {
             // open photo
-            $tmpFile = tempnam("/tmp","TEST");
+            $tmpFile = tempnam("/tmp", "TEST");
             $url = $user->image;
             $content = file_get_contents($url);
-            file_put_contents($tmpFile,$content);
+            file_put_contents($tmpFile, $content);
             //file_put_contents($tmpFile, base64_decode($user->imageData));
             $photo = $this->imagine->open($tmpFile);
 
@@ -167,8 +196,17 @@ class Image
 
     public function drawTitle()
     {
+        $title = "Günthers Choice";
+
+        $nachName = $this->data[0]->name;
+        $randNumber = rand(0,count($this->funnyNameArray));
+        $randNumber = 0;
+        $title = $this->funnyNameArray[$randNumber];
+        $title = str_replace("__NAME__",$nachName,$title);
+
+
         $fontStructure = new FontStruct(
-            "Günthers Choice",
+            $title,
             150,
             'fff',
             new \Imagine\Image\Point(0, 750),
@@ -182,10 +220,17 @@ class Image
     public function createCenterText(FontStruct $fontStruct)
     {
         $file = "SFMoviePoster.ttf";
-        $font = new \Imagine\Imagick\Font($this->collage->getImagick(), $file, $fontStruct->getSize(), $this->collage->palette()->color($fontStruct->getColor()));
+        $size = $fontStruct->getSize();
+        $font = new \Imagine\Imagick\Font($this->collage->getImagick(), $file, $size, $this->collage->palette()->color($fontStruct->getColor()));
         $text = $fontStruct->getText();
         $draw = $this->collage->draw();
+
         $textlen = $draw->getTextLenght($text, $font);
+        while($textlen > $fontStruct->getWidth()){
+            $size--;
+            $font->setSize($size);
+            $textlen = $draw->getTextLenght($text, $font);
+        }
         $xPosition = $fontStruct->getWidth() / 2 - $textlen / 2;
         $point = new \Imagine\Image\Point($fontStruct->getPoint()->getX() + $xPosition, $fontStruct->getPoint()->getY());
         $draw->text($text, $font, $point, 0);
