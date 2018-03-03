@@ -105,6 +105,26 @@ class Image
         "__NAME__ Potter",
 
     ];
+
+    public $movieNames = [
+        "Fey",
+        "Diaz",
+        "White",
+        "Goldberg",
+        "Messing",
+        "Robinson",
+        "Loft",
+        "Sanders",
+        "Carrey",
+        "Murphy",
+        "Carell",
+        "Sandler",
+        "Stiller",
+        "Rogen",
+        "Budimann"
+
+
+    ];
     /**
      * @var \Imagine\Imagick\Imagine
      */
@@ -128,7 +148,7 @@ class Image
     public function __construct($data)
     {
         $this->imagine = new Imagine\Imagick\Imagine();
-        $path = __DIR__ . "/background1.jpg";
+        $path = __DIR__ . "/background2.jpg";
         $this->collage = $this->imagine->open($path);
         $this->data = $data->form;
     }
@@ -168,12 +188,12 @@ class Image
             $this->data[2]->name,
             $this->data[3]->name
         );
-        $nachnamen = array(
-            "Cruise",
-            "Carrey",
-            "Murphy",
-            "Stiller"
-        );
+
+
+
+
+
+
         for ($i = 0; $i < 4; $i++) {
             $fontStructure = new FontStruct(
                 $vornamen[$i],
@@ -184,8 +204,11 @@ class Image
             );
             $this->createCenterText($fontStructure);
 
+            $randNumber = rand(0, count($this->movieNames)-1);
+
+
             $fontStructure = new FontStruct(
-                $nachnamen[$i],
+                $this->movieNames[$randNumber],
                 60,
                 'fff',
                 new \Imagine\Image\Point($i * 175, 200),
@@ -204,7 +227,7 @@ class Image
         $title = "Günthers Choice";
 
         $nachName = $this->data[0]->name;
-        $randNumber = rand(0, count($this->funnyNameArray));
+        $randNumber = rand(0, count($this->funnyNameArray)-1);
         //$randNumber = 0;
         $title = $this->funnyNameArray[$randNumber];
         $title = str_replace("__NAME__", $nachName, $title);
