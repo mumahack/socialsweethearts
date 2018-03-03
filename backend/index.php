@@ -69,40 +69,36 @@ class FontStruct
     }
 }
 
-class Image
+class NameGenerator
 {
 
-    public $funnyNameArray = [
+
+    public $movieTitlesArray = [
         /*
         "__NAME__ und der letzte Gentleman",
         "The Curious case of __NAME__ Button",
         "__NAME__ Wonka and the Chocolate Factory",
         */
-        "__NAME__ Croft: Tomb Raider",
-        "3 Engel für __NAME__",
-        "__NAME__ die Meerjungfrau",
-        "Findet __NAME__",
-
-        "__NAME__ Brokovich",
-        "__NAME__ - Total verhext",
-        "__NAME__ in Wonderland",
-        "__NAME__'s Choice",
-        "__NAME__ Jones' diary",
-        "A Fish called __NAME__",
-        "The exorcism of __NAME__ rose",
-        "Along came __NAME__",
-        "__NAME__ Poppins",
-        "__NAME__ Croft: Tomb Raider",
-        "__NAME__ The Vampire Slayer",
-
-        "__NAME__ Gump",
-        "__NAME__ Potter",
-
-        "__NAME__ Jones",
-        "How __NAME__ Stole Christmas",
-        "Verrückt nach __NAME__",
-        "__NAME__ und der wilde Kaiser",
-        "__NAME__ Potter",
+        "__NAME__ Croft: Tomb Raider" => "background1.jpg",
+        "3 Engel für __NAME__" => "background1.jpg",
+        "__NAME__ die Meerjungfrau" => "background1.jpg",
+        "Findet __NAME__" => "background1.jpg",
+        "__NAME__ Brokovich" => "background1.jpg",
+        "__NAME__ - Total verhext" => "background1.jpg",
+        "__NAME__ in Wonderland" => "background1.jpg",
+        "__NAME__'s Choice" => "background1.jpg",
+        "__NAME__ Jones' diary" => "background1.jpg",
+        "A Fish called __NAME__" => "background1.jpg",
+        "The exorcism of __NAME__ rose" => "background1.jpg",
+        "Along came __NAME__" => "background1.jpg",
+        "__NAME__ Poppins" => "background1.jpg",
+        "__NAME__ The Vampire Slayer" => "background1.jpg",
+        "__NAME__ Gump" => "background1.jpg",
+        "__NAME__ Jones" => "background1.jpg",
+        "How __NAME__ Stole Christmas" => "background1.jpg",
+        "Verrückt nach __NAME__" => "background1.jpg",
+        "__NAME__ und der wilde Kaiser" => "background1.jpg",
+        "__NAME__ Potter" => "background1.jpg",
 
     ];
 
@@ -125,6 +121,46 @@ class Image
 
 
     ];
+
+
+    public $movieName;
+    public $backgroundPictureName;
+
+    public function __construct()
+    {
+        $randNumber = rand(0, count($this->movieTitlesArray) - 1);
+        $title = array_keys($this->movieTitlesArray);
+        $this->movieName = $title[$randNumber];
+        $this->backgroundPictureName = __DIR__ . "/backgrounds/background2.jpg";
+    }
+
+    public function getBackgroundPicture()
+    {
+        return $this->backgroundPictureName;
+    }
+
+    public function getMovieTitle()
+    {
+        return $this->movieName;
+    }
+
+    public function getRandomNames()
+    {
+        $retArr = [];
+        for ($i = 0; $i < 4; $i++) {
+            $randNumber = rand(0, count($this->movieNames) - 1);
+            $retArr[] = $this->movieNames[$randNumber];
+            unset($this->movieNames[$randNumber]);
+        }
+        return $retArr;
+    }
+
+}
+
+class Image
+{
+
+
     /**
      * @var \Imagine\Imagick\Imagine
      */
@@ -143,13 +179,18 @@ class Image
     protected $tmpFiles;
 
     /**
+     * @var NameGenerator
+     */
+    protected $nameGenerator;
+
+    /**
      * @param array $data
      */
     public function __construct($data)
     {
         $this->imagine = new Imagine\Imagick\Imagine();
-        $path = __DIR__ . "/background2.jpg";
-        $this->collage = $this->imagine->open($path);
+        $this->nameGenerator = new NameGenerator();
+        $this->collage = $this->imagine->open($this->nameGenerator->getBackgroundPicture());
         $this->data = $data->form;
     }
 
@@ -167,6 +208,8 @@ class Image
             file_put_contents($tmpFile, $content);
             //file_put_contents($tmpFile, base64_decode($user->imageData));
             $photo = $this->imagine->open($tmpFile);
+            $color = $photo->palette()->color('#FF00D0');
+            $photo->effects()->grayscale()->colorize($color);
 
             $photo->resize(new Imagine\Image\Box($constant, $constant));
 
@@ -189,10 +232,7 @@ class Image
             $this->data[3]->name
         );
 
-
-
-
-
+        $nachnamen = $this->nameGenerator->getRandomNames();
 
         for ($i = 0; $i < 4; $i++) {
             $fontStructure = new FontStruct(
@@ -204,11 +244,9 @@ class Image
             );
             $this->createCenterText($fontStructure);
 
-            $randNumber = rand(0, count($this->movieNames)-1);
-
 
             $fontStructure = new FontStruct(
-                $this->movieNames[$randNumber],
+                $nachnamen[$i],
                 60,
                 'fff',
                 new \Imagine\Image\Point($i * 175, 200),
@@ -225,12 +263,10 @@ class Image
     public function drawTitle()
     {
         $title = "Günthers Choice";
-
         $nachName = $this->data[0]->name;
-        $randNumber = rand(0, count($this->funnyNameArray)-1);
-        //$randNumber = 0;
-        $title = $this->funnyNameArray[$randNumber];
-        $title = str_replace("__NAME__", $nachName, $title);
+
+
+        $title = str_replace("__NAME__", $nachName, $this->nameGenerator->getMovieTitle());
 
 
         $fontStructure = new FontStruct(
@@ -309,7 +345,7 @@ $preData = '
 
 ';
 
-
+error_reporting(E_ALL & ~E_NOTICE);
 $data = json_decode(file_get_contents('php://input'));
 if ($data == null) {
     $data = json_decode($preData);
