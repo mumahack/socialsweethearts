@@ -137,7 +137,7 @@ class Image
                 $nachnamen[$i],
                 60,
                 'fff',
-                new \Imagine\Image\Point($i * 175, 210),
+                new \Imagine\Image\Point($i * 175, 200),
                 175
             );
             $this->createCenterText($fontStructure);
