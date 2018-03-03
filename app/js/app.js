@@ -4,6 +4,7 @@
     var $button = document.querySelector("#login");
     var $loader = document.querySelector("#loader");
     var $info = document.querySelector("#loader span");
+    var $share = document.querySelector("#share");
 
     app.login = function() {
         FB.login(app.onLogin, {scope: "publish_actions,user_posts,user_relationships,user_photos,user_location,user_likes,user_status,user_friends,user_about_me,user_relationship_details,user_tagged_places"});
@@ -112,11 +113,13 @@
         $area.style.display = "block";
         $loader.style.display = "none";
 
-        FB.ui({
-            method: 'share',
-            href: image,
-        }, function(response){
-            console.log(arguments);
+        $share.addEventListener("click", function() {
+            FB.ui({
+                method: 'share',
+                href: image,
+            }, function(response){
+                console.log(arguments);
+            });
         });
     };
 
