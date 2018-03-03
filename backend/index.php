@@ -131,7 +131,8 @@ class NameGenerator
         $randNumber = rand(0, count($this->movieTitlesArray) - 1);
         $title = array_keys($this->movieTitlesArray);
         $this->movieName = $title[$randNumber];
-        $this->backgroundPictureName = __DIR__ . "/backgrounds/background2.jpg";
+        $backgroundFile = $this->movieTitlesArray[$this->movieName];
+        $this->backgroundPictureName = __DIR__ . "/backgrounds/" . $backgroundFile;
     }
 
     public function getBackgroundPicture()
