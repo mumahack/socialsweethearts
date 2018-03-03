@@ -7,42 +7,15 @@ $imagine = new Imagine\Imagick\Imagine();
 
 $constant = 250;
 
-
-$collage = $imagine->create(new Imagine\Image\Box($constant * 2, $constant * 2));
-
-// starting coordinates (in pixels) for inserting the first image
-$x = 0;
-$y = 0;
+$path = __DIR__."/sample/1_crop.jpg";
+$collage = $imagine->open($path);
 
 
-foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
-    // open photo
-    $photo = $imagine->open($path);
 
-    $photo->resize(new Imagine\Image\Box($constant, $constant));
-
-
-    // paste photo at current position
-    $collage->paste($photo, new Imagine\Image\Point($x, $y));
-
-    // move position by 30px to the right
-    $x += $constant;
-
-    if ($x >= $constant * 2) {
-        // we reached the right border of our collage, so advance to the
-        // next row and reset our column to the left.
-        $y += $constant;
-        $x = 0;
-    }
-
-    if ($y >= $constant * 2) {
-        break; // done
-    }
-}
-$file = "OpenSans-Regular.ttf";
-$font = new \Imagine\Imagick\Font($collage->getImagick(), $file, 70, $collage->palette()->color('fff'));
+$file = "SFMoviePoster.ttf";
+$font = new \Imagine\Imagick\Font($collage->getImagick(), $file, 150, $collage->palette()->color('fff'));
 $collage->draw()
-    ->text("MuMaLAb", $font, new \Imagine\Image\Point(0, $constant));
+    ->text("The Title", $font, new \Imagine\Image\Point(40, 600),0,700);
 
 
 $collage->show("jpg");
