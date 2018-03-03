@@ -107,11 +107,10 @@ class Image
         $y = 0;
         foreach ($this->data as $user) {
             // open photo
-            $tmpFile = __DIR__ . '/' . $user->name . '.jpg';
+            $tmpFile = tempnam('/tmp', 'TEST');
             $url = $user->image;
             $content = file_get_contents($url);
             file_put_contents($tmpFile,$content);
-            //file_put_contents($tmpFile, base64_decode($user->imageData));
             $photo = $this->imagine->open($tmpFile);
 
             $photo->resize(new Imagine\Image\Box($constant, $constant));
@@ -168,7 +167,7 @@ class Image
     public function drawTitle()
     {
         $fontStructure = new FontStruct(
-            "Günthers Choice",
+            $this->data[0]->name . "'s Choice",
             150,
             'fff',
             new \Imagine\Image\Point(0, 750),
@@ -199,9 +198,6 @@ class Image
 
 $data = json_decode(file_get_contents('php://input'));
 
-
-$data = "{\"form\":[{\"name\":\"Berni Localhost\",\"gender\":\"male\",\"image\":\"https://scontent.xx.fbcdn.net/v/t1.0-1/c134.0.533.533/564947_540508512642219_1652399921_n.jpg?oh=d025ae49a080d6cf9198d084c6edaf7c&oe=5B0C110B\"},{\"name\":\"Maurizio Cappone\",\"image\":\"https://scontent.xx.fbcdn.net/v/t31.0-1/p720x720/14257483_1223334907687298_5770953523741588902_o.jpg?oh=77a6e93735851dc43a2b50ca7dc740a6&oe=5B426FA5\"},{\"name\":\"Ira Auditore da Firenze\",\"image\":\"https://scontent.xx.fbcdn.net/v/t1.0-1/c0.0.720.720/21314801_1483958651647285_3362088778471442842_n.jpg?oh=19b1cb73e2dc8505672bb21b8d027d5d&oe=5B47BDA8\"},{\"name\":\"Michael Riegert\",\"image\":\"https://scontent.xx.fbcdn.net/v/t31.0-1/c344.0.720.720/p720x720/21055000_1781101275252494_8901017328562721445_o.jpg?oh=cfbaf2528e523dabd8c04bc0d9820ae3&oe=5B04210C\"}]}";
-$data = json_decode($data);
 $obj = new Image($data);
 $obj->drawImages();
 $obj->drawTitle();
