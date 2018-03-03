@@ -152,6 +152,7 @@ class NameGenerator
             $retArr[] = $this->movieNames[$randNumber];
             unset($this->movieNames[$randNumber]);
         }
+        return $retArr;
     }
 
 }
@@ -344,7 +345,7 @@ $preData = '
 
 ';
 
-
+error_reporting(E_ALL & ~E_NOTICE);
 $data = json_decode(file_get_contents('php://input'));
 if ($data == null) {
     $data = json_decode($preData);
