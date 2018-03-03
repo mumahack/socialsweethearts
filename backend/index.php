@@ -247,14 +247,13 @@ class Image
 
         $fileName = $md5 . ".jpg";
         $this->collage->save(__DIR__ . "/pictures/" . $fileName);
-        return $fileName;
+        $url = "https://post-a-poster.twinsen.de/backend/pictures/" . $fileName;
+        return $url;
 
     }
 }
 
-$data = json_decode(file_get_contents('php://input'));
-
-$data = '
+$preData = '
 
 
 {
@@ -283,8 +282,10 @@ $data = '
 ';
 
 
-
-
+$data = json_decode(file_get_contents('php://input'));
+if ($data == null) {
+    $data = $preData;
+}
 
 
 $data = json_decode($data);
