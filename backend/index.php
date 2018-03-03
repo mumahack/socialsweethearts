@@ -6,11 +6,8 @@ $imagine = new Imagine\Imagick\Imagine();
 // make an empty image (canvas) 120x160px
 
 
-
 $path = __DIR__ . "/1_crop.jpg";
 $collage = $imagine->open($path);
-
-
 
 
 // starting coordinates (in pixels) for inserting the first image
@@ -35,11 +32,18 @@ foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
 }
 
 
-
 $file = "SFMoviePoster.ttf";
 $font = new \Imagine\Imagick\Font($collage->getImagick(), $file, 150, $collage->palette()->color('fff'));
+
+$text = "The Title";
+$textlen = $collage->draw()->getTextLenght($text, $font);
+
+
+$xPosition = 700 / 2 - $textlen / 2;
+//print_r($textlen);
+//die($textlen);
 $collage->draw()
-    ->text("The Title", $font, new \Imagine\Image\Point(40, 600),0,700);
+    ->text($text, $font, new \Imagine\Image\Point($xPosition, 600), 0, 700);
 
 
 $collage->show("jpg");
