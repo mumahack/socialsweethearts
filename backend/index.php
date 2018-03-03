@@ -153,6 +153,7 @@ class NameGenerator
             $randNumber = rand(0, count($this->movieNames) - 1);
             $retArr[] = $this->movieNames[$randNumber];
             unset($this->movieNames[$randNumber]);
+            $this->movieNames = array_values($this->movieNames);
         }
         return $retArr;
     }
@@ -211,7 +212,7 @@ class Image
             //file_put_contents($tmpFile, base64_decode($user->imageData));
             $photo = $this->imagine->open($tmpFile);
             $color = $photo->palette()->color($this->getPixelColor());
-            $photo->effects()->grayscale()->colorize($color);
+            $photo->effects()->grayscale();//->colorize($color);
 
             $photo->resize(new Imagine\Image\Box($constant, $constant));
 
@@ -248,7 +249,7 @@ class Image
         $b = (int)$b;
         return array($r, $g, $b);
         */
-        return "#FFFFFF";
+        return "#485B6C";
 
     }
 
