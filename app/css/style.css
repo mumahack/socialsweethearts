@@ -61,31 +61,41 @@ main {
     padding: 0 20px;
 }
 
-.content button {
+.content #login,
+.content #share {
     width: 100%;
-    height: 70vh;
-    background: url('../assets/sample_poster.jpg') center center;
-    border-radius: 10px;
     border: none;
     outline: none;
     cursor: pointer;
+    background: none;
 }
 
-.content button span {
+.content #login {
+    height: 70vh;
+    background: url('../assets/sample_poster.jpg') center center;
+    border-radius: 10px;
+}
+
+.content #login span {
     font: normal normal normal 16px Arial, sans-serif;
     display: inline-block;
     margin-bottom: 20px;
 }
 
-.content button img {
+.content #login img {
+    width: 400px;
+}
+
+.content #share img {
     width: 400px;
 }
 
 #loader,
-#imageArea {
+#result {
     display: none;
 }
 
+#result,
 #imageArea {
     width: 100%;
 }
