@@ -35,7 +35,7 @@ foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
 $file = "SFMoviePoster.ttf";
 $font = new \Imagine\Imagick\Font($collage->getImagick(), $file, 150, $collage->palette()->color('fff'));
 
-$text = "The Title";
+$text = "Günthers Choice";
 $textlen = $collage->draw()->getTextLenght($text, $font);
 
 
@@ -43,7 +43,7 @@ $xPosition = 700 / 2 - $textlen / 2;
 //print_r($textlen);
 //die($textlen);
 $collage->draw()
-    ->text($text, $font, new \Imagine\Image\Point($xPosition, 600), 0, 700);
+    ->text($text, $font, new \Imagine\Image\Point($xPosition, 750), 0, 700);
 
 
 $collage->show("jpg");
