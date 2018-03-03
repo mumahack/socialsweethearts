@@ -73,11 +73,16 @@ class Image
 {
 
     public $funnyNameArray = [
+        /*
+        "__NAME__ und der letzte Gentleman",
+        "The Curious case of __NAME__ Button",
         "__NAME__ Wonka and the Chocolate Factory",
+        */
+        "__NAME__ Croft: Tomb Raider",
         "3 Engel für __NAME__",
         "__NAME__ die Meerjungfrau",
         "Findet __NAME__",
-        "__NAME__ und der letzte Gentleman",
+
         "__NAME__ Brokovich",
         "__NAME__ - Total verhext",
         "__NAME__ in Wonderland",
@@ -89,7 +94,7 @@ class Image
         "__NAME__ Poppins",
         "__NAME__ Croft: Tomb Raider",
         "__NAME__ The Vampire Slayer",
-        "The Curious case of __NAME__ Button",
+
         "__NAME__ Gump",
         "__NAME__ Potter",
 
@@ -226,7 +231,7 @@ class Image
         $draw = $this->collage->draw();
 
         $textlen = $draw->getTextLenght($text, $font);
-        while($textlen > $fontStruct->getWidth()){
+        while($textlen > $fontStruct->getWidth() - 20 * 2){
             $size--;
             $font->setSize($size);
             $textlen = $draw->getTextLenght($text, $font);
