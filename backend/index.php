@@ -208,7 +208,7 @@ class Image
             file_put_contents($tmpFile, $content);
             //file_put_contents($tmpFile, base64_decode($user->imageData));
             $photo = $this->imagine->open($tmpFile);
-            $color = $photo->palette()->color('#FF00D0');
+            $color = $photo->palette()->color($this->getPixelColor());
             $photo->effects()->grayscale()->colorize($color);
 
             $photo->resize(new Imagine\Image\Box($constant, $constant));
@@ -221,6 +221,29 @@ class Image
             $x += $constant;
 
         }
+    }
+
+    public function getPixelColor()
+    {
+        $y = 176;
+        $xCount = 175;
+        $r = 0;
+        $g = 0;
+        $b = 0;
+        for ($x = 0; $x < $xCount; $x++) {
+            $colorArray = $this->collage->getImagick()->getImagePixelColor($x, $y)->getColor();
+            $r += $colorArray["r"];
+            $g += $colorArray["g"];
+            $b += $colorArray["b"];
+        }
+        $r /= $xCount;
+        $g /= $xCount;
+        $b /= $xCount;
+
+        $r = (int)$r;
+        $g = (int)$g;
+        $b = (int)$b;
+        return array($r, $g, $b);
     }
 
     public function drawNames()
