@@ -79,12 +79,24 @@ class Image
      * @var \Imagine\Image\ImageInterface|\Imagine\Imagick\Image
      */
     protected $collage;
+    /**
+     * @var \stdClass
+     */
+    protected $data;
+    /**
+     * @var array
+     */
+    protected $tmpFiles;
 
-    public function __construct()
+    /**
+     * @param array $data
+     */
+    public function __construct($data)
     {
         $this->imagine = new Imagine\Imagick\Imagine();
         $path = __DIR__ . "/1_crop.jpg";
         $this->collage = $this->imagine->open($path);
+        $this->data = $data->form;
     }
 
     public function drawImages()
@@ -93,9 +105,11 @@ class Image
         // starting coordinates (in pixels) for inserting the first image
         $x = 0;
         $y = 0;
-        foreach (glob(__DIR__ . '/sample/*.jpg') as $path) {
+        foreach ($this->data as $user) {
             // open photo
-            $photo = $this->imagine->open($path);
+            $tmpFile = __DIR__ . '/' . $user->name . '.jpg';
+            file_put_contents($tmpFile, base64_decode($user->imageData));
+            $photo = $this->imagine->open($tmpFile);
 
             $photo->resize(new Imagine\Image\Box($constant, $constant));
 
@@ -112,10 +126,10 @@ class Image
     public function drawNames()
     {
         $vornamen = array(
-            "Stefan",
-            "Peter",
-            "Brigitte",
-            "Ingeborg"
+            $this->data[0]->name,
+            $this->data[1]->name,
+            $this->data[2]->name,
+            $this->data[3]->name
         );
         $nachnamen = array(
             "Cruise",
@@ -178,14 +192,13 @@ class Image
     {
         $this->collage->show("jpg");
     }
-
 }
 
-$obj = new Image();
+$data = json_decode(file_get_contents('php://input'));
+
+$obj = new Image($data);
 $obj->drawImages();
 $obj->drawTitle();
 $obj->drawNames();
 $obj->output();
-
-
 

@@ -31,13 +31,16 @@
                     });
                 }
             ], function() {
-                console.log(me, friends);
-                app.ajax("/backend/", { me: me, friends: friends }, function(err, response) {
+                var data = [app.getMessage(me)];
+                friends.forEach(function(friend) {
+                    data.push(app.getMessage(friend));
+                });
+
+                app.ajax("/backend/", data, function(err, response) {
                     if(err) {
                         console.error(err);
                     } else {
                         var image = new Image();
-                        //image.src = global.URL.createObjectURL(new Blob([response.response], { type: "image/jpg" }));
                         image.src = "data:image/jpg;base64," + app.base64(response.responseText);
                         app.showImage(image);
                     }
@@ -46,12 +49,29 @@
         });
     };
 
+    app.getMessage = function(user) {
+        return {
+            name: user.name,
+            gender: user.info.gender,
+            image: user.info.image,
+            imageData: user.info.imagedata
+        };
+    };
+
     app.getUserInfo = function(userId, callback) {
         FB.api("/" + userId, { fields: "picture.type(square).width(720).height(720),gender" }, function(response) {
-            callback({
-                image: response.picture.data.url,
-                gender: response.gender
-            });
+            var xhr = new XMLHttpRequest();
+
+            xhr.onload = function() {
+                callback({
+                    image: response.picture.data.url,
+                    imagedata: app.base64(xhr.responseText),
+                    gender: response.gender
+                });
+            };
+
+            xhr.open("GET", response.picture.data.url);
+            xhr.send();
         });
     };
 
@@ -110,16 +130,16 @@
         };
 
         xhr.open("POST", url, true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-        xhr.send(data);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        //xhr.overrideMimeType('text/plain; charset=x-user-defined');
+        xhr.send(JSON.stringify({form: data}));
     };
 
     app.base64 = function(inputStr) {
        var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
        var outputStr = "";
        var i = 0;
-       
+
        while (i<inputStr.length){
           var byte1 = inputStr.charCodeAt(i++) & 0xff;
           var byte2 = inputStr.charCodeAt(i++) & 0xff;
@@ -127,7 +147,7 @@
 
           var enc1 = byte1 >> 2;
           var enc2 = ((byte1 & 3) << 4) | (byte2 >> 4);
-          
+
           var enc3, enc4;
           if (isNaN(byte2)){
 			enc3 = enc4 = 64;
@@ -140,7 +160,7 @@
             }
           }
           outputStr +=  b64.charAt(enc1) + b64.charAt(enc2) + b64.charAt(enc3) + b64.charAt(enc4);
-       } 
+       }
        return outputStr;
     };
 
