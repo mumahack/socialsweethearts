@@ -6,8 +6,39 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <div id="imageArea"></div>
-        <button onclick="app.login()">Login with Facebook</button>
+        <div class="header">
+            <h1>Post a Poster</h1>
+        </div>
+        <main>
+        <div class="container">
+            <div class="sidebar left">
+                <img src="assets/mid.gif" alt="" class="ad" />
+            </div>
+            <div class="content">
+                <button id="login" onclick="app.login()">
+                    <span>Get your Poster now!</span>
+                    <br />
+                    <img src="assets/login.png" alt="" />
+                </button>
+                <center id="loader">
+                    <img src="assets/loader.gif" alt="" />
+                    <br />
+                    <span>Loading...</span>
+                </center>
+                <div id="result">
+                    <img id="imageArea" alt="" src="data:image/png," />
+                </div>
+            </div>
+            <div class="sidebar right">
+                <img src="assets/mid.gif" alt="" class="ad" />
+            </div>
+        </div>
+    </main>
+        <footer>
+        <div class="footer">
+            &copy; 2018 Post a Poster
+        </div>
+        </footer>
 
         <script>
             window.fbAsyncInit = function() {
