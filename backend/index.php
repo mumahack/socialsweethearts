@@ -107,7 +107,7 @@ class Image
         $y = 0;
         foreach ($this->data as $user) {
             // open photo
-            $tmpFile = __DIR__ . '/' . $user->name . '.jpg';
+            $tmpFile = tempnam("/tmp","TEST");
             $url = $user->image;
             $content = file_get_contents($url);
             file_put_contents($tmpFile,$content);
