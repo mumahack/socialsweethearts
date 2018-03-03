@@ -111,6 +111,40 @@ class Image
 
     public function drawNames()
     {
+        $vornamen = array(
+            "Stefan",
+            "Peter",
+            "Brigitte",
+            "Ingeborg"
+        );
+        $nachnamen = array(
+            "Cruise",
+            "Carrey",
+            "Murphy",
+            "Stiller"
+        );
+        for ($i = 0; $i < 4; $i++) {
+            $fontStructure = new FontStruct(
+                $vornamen[$i],
+                40,
+                'fff',
+                new \Imagine\Image\Point($i * 175, 175),
+                175
+            );
+            $this->createCenterText($fontStructure);
+
+            $fontStructure = new FontStruct(
+                $nachnamen[$i],
+                60,
+                'fff',
+                new \Imagine\Image\Point($i * 175, 210),
+                175
+            );
+            $this->createCenterText($fontStructure);
+
+
+        }
+
 
     }
 
