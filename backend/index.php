@@ -1,6 +1,74 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
 
+class FontStruct
+{
+    private $text;
+
+    /**
+     * @return mixed
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @return \Imagine\Image\Point
+     */
+    public function getPoint()
+    {
+        return $this->point;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    private $size;
+    private $color;
+    /**
+     * @var \Imagine\Image\Point
+     */
+    private $point;
+    private $width;
+
+    public function __construct(
+        $text,
+        $size,
+        $color,
+        \Imagine\Image\Point $point,
+        $width
+    )
+    {
+        $this->text = $text;
+        $this->size = $size;
+        $this->color = $color;
+        $this->point = $point;
+        $this->width = $width;
+    }
+}
+
 class Image
 {
     /**
@@ -48,14 +116,28 @@ class Image
 
     public function drawTitle()
     {
+        $fontStructure = new FontStruct(
+            "Günthers Choice",
+            150,
+            'fff',
+            new \Imagine\Image\Point(0, 750),
+            700
+        );
+        $this->createCenterText($fontStructure);
+
+
+    }
+
+    public function createCenterText(FontStruct $fontStruct)
+    {
         $file = "SFMoviePoster.ttf";
-        $font = new \Imagine\Imagick\Font($this->collage->getImagick(), $file, 150, $this->collage->palette()->color('fff'));
-        $text = "Günthers Choice";
+        $font = new \Imagine\Imagick\Font($this->collage->getImagick(), $file, $fontStruct->getSize(), $this->collage->palette()->color($fontStruct->getColor()));
+        $text = $fontStruct->getText();
         $draw = $this->collage->draw();
         $textlen = $draw->getTextLenght($text, $font);
-        $xPosition = 700 / 2 - $textlen / 2;
-        $draw->text($text, $font, new \Imagine\Image\Point($xPosition, 750), 0, 700);
-
+        $xPosition = $fontStruct->getWidth() / 2 - $textlen / 2;
+        $point = new \Imagine\Image\Point($fontStruct->getPoint()->getX() + $xPosition, $fontStruct->getPoint()->getY());
+        $draw->text($text, $font, $point, 0);
     }
 
     public function output()
