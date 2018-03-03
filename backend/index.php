@@ -132,6 +132,7 @@ class NameGenerator
         $title = array_keys($this->movieTitlesArray);
         $this->movieName = $title[$randNumber];
         $backgroundFile = $this->movieTitlesArray[$this->movieName];
+        $backgroundFile = "background2.jpg";
         $this->backgroundPictureName = __DIR__ . "/backgrounds/" . $backgroundFile;
     }
 
@@ -226,6 +227,7 @@ class Image
 
     public function getPixelColor()
     {
+        /*
         $y = 176;
         $xCount = 175;
         $r = 0;
@@ -245,6 +247,9 @@ class Image
         $g = (int)$g;
         $b = (int)$b;
         return array($r, $g, $b);
+        */
+        return "#FFFFFF";
+
     }
 
     public function drawNames()
