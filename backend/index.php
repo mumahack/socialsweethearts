@@ -242,7 +242,12 @@ class Image
     }
 
     public function output()
+
     {
+
+        if ($_SERVER["HTTP_HOST"] == "127.0.0.1") {
+            $this->collage->show('jpg');
+        }
         $md5 = md5($this->collage->get('jpg'));
 
         $fileName = $md5 . ".jpg";
